@@ -27,7 +27,6 @@ export class AnnotationStyle {
     stroke?: string;
     strokeWidth?: number;
     lineDash?: [];
-    label?: AnnotationLabel;
 }
 interface AnnotationPathData {
     readonly points: {
@@ -42,6 +41,12 @@ export class Annotation<XS extends Scale<any, number>, YS extends Scale<any, num
     type?: "line" | "range";
     range?: [any, any];
     value?: any;
+    fill?: string;
+    fillOpacity?: number;
+    stroke?: string;
+    strokeWidth?: number;
+    strokeOpacity?: number;
+    lineDash?: [];
     style?: AnnotationStyle = new AnnotationStyle();
     label?: AnnotationLabel = new AnnotationLabel();
 
@@ -138,16 +143,18 @@ export class Annotation<XS extends Scale<any, number>, YS extends Scale<any, num
     }
 
     private updateLineNode() {
-        const { annotationLine } = this;
-        annotationLine.stroke = 'black';
-        annotationLine.strokeWidth = 2;
+        const { annotationLine, stroke, strokeWidth, lineDash } = this;
+        annotationLine.stroke = stroke;
+        annotationLine.strokeWidth = strokeWidth ?? 1;
+        annotationLine.opacity = this.strokeOpacity ?? 1;
+        annotationLine.lineDash = lineDash;
     }
 
     private updateRangeNode() {
-        const { annotationRange } = this;
-        annotationRange.fill = "pink";
-        annotationRange.stroke = 'yellow';
-        annotationRange.strokeWidth = 4;
+        const { annotationRange, fill, lineDash, fillOpacity } = this;
+        annotationRange.fill = fill;
+        annotationRange.opacity = fillOpacity ?? 1;
+        annotationRange.lineDash = lineDash;
     }
 
     private updateRangePath() {
